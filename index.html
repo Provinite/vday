@@ -1,0 +1,2120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Valentine's Day!</title>
+    <style>
+      /* ============================================================
+   CUSTOMIZATION - Edit these CSS custom properties!
+   ============================================================ */
+      :root {
+        --bg-primary: #ffeef2;
+        --bg-secondary: #ffd6e0;
+        --accent: #e8456b;
+        --accent-dark: #c73558;
+        --accent-light: #ffb3c6;
+        --text: #5a1a2a;
+        --text-light: #8a4a5a;
+        --card-bg: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ============================================================
+   RESET & BASE
+   ============================================================ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-primary) 0%,
+          var(--bg-secondary) 50%,
+          #ffc8d6 100%
+        );
+        min-height: 100vh;
+        color: var(--text);
+        overflow-x: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      /* ============================================================
+   SCREENS
+   ============================================================ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem 1rem;
+        position: relative;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ============================================================
+   BACK BUTTON
+   ============================================================ */
+      .back-btn {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        background: var(--card-bg);
+        border: 2px solid var(--accent-light);
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        z-index: 10;
+        color: var(--accent);
+      }
+      .back-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(232, 69, 107, 0.3);
+      }
+
+      /* ============================================================
+   FLOATING HEARTS BACKGROUND
+   ============================================================ */
+      .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .floating-heart {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.15;
+        animation: floatUp linear infinite;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(110vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.15;
+        }
+        90% {
+          opacity: 0.15;
+        }
+        100% {
+          transform: translateY(-10vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+   HUB SCREEN
+   ============================================================ */
+      .hub-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 700;
+        color: var(--accent);
+        text-align: center;
+        margin-bottom: 0.5rem;
+        z-index: 1;
+        text-shadow: 0 2px 10px rgba(232, 69, 107, 0.2);
+      }
+      .hub-subtitle {
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        color: var(--text-light);
+        margin-bottom: 2.5rem;
+        z-index: 1;
+        text-align: center;
+      }
+      .hub-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        max-width: 700px;
+        width: 100%;
+        z-index: 1;
+      }
+      .hub-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border: 2px solid var(--accent-light);
+        border-radius: 1.5rem;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s;
+      }
+      .hub-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 12px 30px rgba(232, 69, 107, 0.25);
+      }
+      .hub-card:active {
+        transform: translateY(-2px) scale(0.98);
+      }
+      .hub-card-emoji {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 0.8rem;
+      }
+      .hub-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--accent-dark);
+      }
+      .hub-card-desc {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: 0.3rem;
+      }
+
+      /* ============================================================
+   LOVE NOTES
+   ============================================================ */
+      #love-notes-screen {
+        gap: 2rem;
+      }
+      .love-heart-btn {
+        font-size: 8rem;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        filter: drop-shadow(0 8px 20px rgba(232, 69, 107, 0.4));
+        animation: heartPulse 1.5s ease-in-out infinite;
+        position: relative;
+        z-index: 1;
+      }
+      .love-heart-btn:hover {
+        transform: scale(1.15);
+      }
+      .love-heart-btn:active {
+        transform: scale(0.9);
+        animation: none;
+      }
+      .love-heart-btn.cracked {
+        animation: heartCrack 0.6s ease-out forwards;
+      }
+      @keyframes heartPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+      @keyframes heartCrack {
+        0% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(1.3) rotate(-5deg);
+        }
+        60% {
+          transform: scale(0.95) rotate(3deg);
+        }
+        100% {
+          transform: scale(1.05) rotate(0deg);
+        }
+      }
+      .love-note-text {
+        font-size: clamp(1.2rem, 4vw, 1.8rem);
+        max-width: 500px;
+        text-align: center;
+        color: var(--accent-dark);
+        min-height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        font-style: italic;
+        line-height: 1.6;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .love-note-text.visible {
+        opacity: 1;
+      }
+      .love-note-hint {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        z-index: 1;
+      }
+
+      /* ============================================================
+   RAT RACE
+   ============================================================ */
+      #rat-race-screen {
+        justify-content: flex-start;
+        padding-top: 5rem;
+        gap: 1rem;
+      }
+      .race-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        z-index: 1;
+      }
+      .race-status {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        z-index: 1;
+        min-height: 2em;
+        text-align: center;
+      }
+      .race-track-container {
+        width: 100%;
+        max-width: 700px;
+        z-index: 1;
+      }
+      .race-track {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 1rem;
+        padding: 0.6rem 1rem;
+        margin-bottom: 0.6rem;
+        position: relative;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        min-height: 56px;
+      }
+      .race-track.selectable:hover {
+        border-color: var(--accent-light);
+        background: rgba(255, 255, 255, 0.8);
+      }
+      .race-track.selected {
+        border-color: var(--accent);
+        background: rgba(255, 179, 198, 0.3);
+      }
+      .race-track.clickable {
+        cursor: pointer;
+      }
+      .race-track.clickable:active .race-rat {
+        transform: scale(1.3);
+      }
+      .race-lane-num {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        width: 1.5rem;
+        flex-shrink: 0;
+      }
+      .race-rat {
+        font-size: 2rem;
+        transition:
+          margin-left 0.1s linear,
+          transform 0.15s;
+        margin-left: 0%;
+        flex-shrink: 0;
+      }
+      .race-finish {
+        position: absolute;
+        right: 1rem;
+        font-size: 1.5rem;
+        opacity: 0.3;
+      }
+      .race-name {
+        font-size: 0.75rem;
+        color: var(--text-light);
+        margin-left: 0.5rem;
+        flex-shrink: 0;
+      }
+      .race-controls {
+        display: flex;
+        gap: 1rem;
+        z-index: 1;
+        margin-top: 1rem;
+      }
+      .race-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          background 0.2s;
+      }
+      .race-btn:hover {
+        background: var(--accent-dark);
+        transform: scale(1.05);
+      }
+      .race-btn:active {
+        transform: scale(0.95);
+      }
+      .race-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .race-result {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        z-index: 1;
+        min-height: 2em;
+        text-align: center;
+      }
+
+      /* ============================================================
+   PETTING ZOO
+   ============================================================ */
+      #petting-zoo-screen {
+        gap: 1.5rem;
+        padding-top: 4rem;
+      }
+      .zoo-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        z-index: 1;
+      }
+      .zoo-subtitle {
+        color: var(--text-light);
+        z-index: 1;
+      }
+      .zoo-pets {
+        display: flex;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        z-index: 1;
+        max-width: 700px;
+      }
+      .zoo-pet {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        position: relative;
+      }
+      .zoo-pet-emoji {
+        font-size: 3.5rem;
+        transition: transform 0.15s;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+      }
+      .zoo-pet-emoji.big {
+        font-size: 6rem;
+      }
+      .zoo-pet-emoji.small {
+        font-size: 2.5rem;
+      }
+      .zoo-pet:active .zoo-pet-emoji {
+        transform: scale(1.2);
+      }
+      .zoo-pet-emoji.wiggle {
+        animation: petWiggle 0.3s ease-in-out;
+      }
+      @keyframes petWiggle {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        25% {
+          transform: rotate(-10deg) scale(1.1);
+        }
+        75% {
+          transform: rotate(10deg) scale(1.1);
+        }
+      }
+      .zoo-pet-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .zoo-meter-bg {
+        width: 120px;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 6px;
+        border: 2px solid var(--accent-light);
+        overflow: hidden;
+      }
+      .zoo-meter-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent-light), var(--accent));
+        border-radius: 6px;
+        transition: width 0.2s ease-out;
+      }
+      .zoo-complete-msg {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.5s;
+        text-align: center;
+      }
+      .zoo-complete-msg.visible {
+        opacity: 1;
+      }
+
+      /* Pet heart particles */
+      .pet-heart {
+        position: fixed;
+        pointer-events: none;
+        z-index: 100;
+        font-size: 1.5rem;
+        animation: petHeartFloat 1s ease-out forwards;
+      }
+      @keyframes petHeartFloat {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(0.5);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--dx), -80px) scale(1.2);
+        }
+      }
+
+      /* ============================================================
+   SCRATCH-OFF
+   ============================================================ */
+      #scratch-screen {
+        justify-content: center;
+        gap: 1.5rem;
+      }
+      .scratch-title {
+        font-size: 1.5rem;
+        color: var(--accent);
+        font-weight: 600;
+        z-index: 1;
+      }
+      .scratch-container {
+        position: relative;
+        width: min(500px, 90vw);
+        height: min(300px, 50vh);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(232, 69, 107, 0.25);
+        z-index: 1;
+      }
+      .scratch-message {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        padding: 2rem;
+        text-align: center;
+      }
+      .scratch-message-hearts {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .scratch-message-text {
+        font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+        color: var(--accent-dark);
+        font-weight: 600;
+        line-height: 1.6;
+      }
+      .scratch-message-hearts-bottom {
+        font-size: 2rem;
+        margin-top: 1rem;
+      }
+      .scratch-canvas {
+        position: absolute;
+        inset: 0;
+        cursor: crosshair;
+        touch-action: none;
+      }
+      .scratch-hint {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        z-index: 1;
+      }
+      .scratch-progress {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        z-index: 1;
+      }
+
+      /* ============================================================
+   KONAMI OVERLAY
+   ============================================================ */
+      .konami-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 238, 242, 0.95);
+        backdrop-filter: blur(8px);
+      }
+      .konami-overlay.active {
+        display: flex;
+        animation: konamiFadeIn 0.5s ease-out;
+      }
+      @keyframes konamiFadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .konami-content {
+        text-align: center;
+        z-index: 1;
+      }
+      .konami-text {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      .konami-sub {
+        font-size: 1.1rem;
+        color: var(--text-light);
+      }
+      .konami-close {
+        margin-top: 2rem;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      /* Confetti */
+      .confetti-heart {
+        position: fixed;
+        pointer-events: none;
+        z-index: 10000;
+        font-size: 1.5rem;
+        animation: confettiFall linear forwards;
+      }
+      @keyframes confettiFall {
+        0% {
+          opacity: 1;
+          transform: translateY(-20px) rotate(0deg) scale(0.5);
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(110vh) rotate(720deg) scale(1);
+        }
+      }
+
+      /* ============================================================
+   TINY GARDEN
+   ============================================================ */
+      #garden-screen {
+        gap: 1.5rem;
+      }
+      .garden-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        z-index: 1;
+      }
+      .garden-subtitle {
+        color: var(--text-light);
+        z-index: 1;
+        text-align: center;
+      }
+      .garden-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+        max-width: 420px;
+        width: 100%;
+        z-index: 1;
+      }
+      .garden-plot {
+        aspect-ratio: 1;
+        background: linear-gradient(145deg, #8b6914, #6b4f10);
+        border-radius: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        cursor: pointer;
+        border: 3px solid #5a3e0a;
+        transition:
+          transform 0.15s,
+          border-color 0.2s,
+          background 0.3s;
+        position: relative;
+      }
+      .garden-plot:hover {
+        transform: scale(1.05);
+        border-color: #9a7b2a;
+      }
+      .garden-plot:active {
+        transform: scale(0.95);
+      }
+      .garden-plot.planted {
+        background: linear-gradient(145deg, #5a3e1a, #4a3210);
+        cursor: default;
+      }
+      .garden-plot.planted:hover {
+        transform: none;
+      }
+      .garden-plot.ready {
+        cursor: pointer;
+        animation: gardenGlow 1.5s ease-in-out infinite;
+      }
+      .garden-plot.ready:hover {
+        transform: scale(1.08);
+      }
+      @keyframes gardenGlow {
+        0%,
+        100% {
+          border-color: #5a3e0a;
+          box-shadow: none;
+        }
+        50% {
+          border-color: var(--accent-light);
+          box-shadow: 0 0 12px rgba(232, 69, 107, 0.3);
+        }
+      }
+      .garden-plot-emoji {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        pointer-events: none;
+      }
+      .garden-plot-emoji.pop {
+        animation: gardenPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes gardenPop {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.3);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .garden-harvest-note {
+        background: var(--card-bg);
+        border: 2px solid var(--accent-light);
+        border-radius: 1rem;
+        padding: 1rem 1.5rem;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        color: var(--accent-dark);
+        font-size: 1.1rem;
+        font-style: italic;
+        z-index: 1;
+        min-height: 3.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .garden-harvest-note.visible {
+        opacity: 1;
+      }
+      .garden-info {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        z-index: 1;
+      }
+
+      /* ============================================================
+   VALENTINE CARD INTRO
+   ============================================================ */
+      #card-screen {
+        padding: 0;
+        justify-content: center;
+      }
+      .vcard {
+        display: flex;
+        width: min(900px, 94vw);
+        min-height: min(520px, 80vh);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 12px 50px rgba(180, 40, 80, 0.25);
+        z-index: 1;
+      }
+      .vcard-left {
+        flex: 1;
+        background: linear-gradient(160deg, #c73558, #e8456b 40%, #f0758a);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .vcard-left-deco {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: heartPulse 1.5s ease-in-out infinite;
+      }
+      .vcard-left-text {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        line-height: 1.4;
+      }
+      .vcard-left-sub {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.75);
+        margin-top: 0.8rem;
+        font-style: italic;
+      }
+      .vcard-left-hearts {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .vcard-left-hearts span {
+        position: absolute;
+        font-size: 1.2rem;
+        opacity: 0.2;
+        animation: floatUp linear infinite;
+      }
+      .vcard-right {
+        flex: 1;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 2rem;
+        position: relative;
+      }
+      .vcard-question {
+        font-size: clamp(1.4rem, 3.5vw, 2rem);
+        font-weight: 700;
+        color: var(--accent-dark);
+        text-align: center;
+        margin-bottom: 2.5rem;
+        line-height: 1.4;
+      }
+      .vcard-buttons {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        position: relative;
+        min-height: 80px;
+        width: 100%;
+        justify-content: center;
+      }
+      .vcard-yes-btn {
+        background: linear-gradient(135deg, #e8456b, #c73558);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.2s;
+        z-index: 2;
+      }
+      .vcard-yes-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(232, 69, 107, 0.45);
+      }
+      .vcard-yes-btn:active {
+        transform: scale(0.95);
+      }
+
+      .vcard-no-btn {
+        background: #e0e0e0;
+        color: #666;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 2;
+        white-space: nowrap;
+        will-change: transform;
+      }
+      .vcard-no-btn.drift {
+        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .vcard-no-btn.jump {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .vcard-no-btn.shrink {
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .vcard-no-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        background: #ccc;
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
+
+      .vcard-accepted {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .vcard-accepted.visible {
+        display: flex;
+        animation: konamiFadeIn 0.6s ease-out;
+      }
+      .vcard-accepted-emoji {
+        font-size: 4rem;
+      }
+      .vcard-accepted-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        text-align: center;
+      }
+      .vcard-accepted-continue {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition:
+          transform 0.2s,
+          background 0.2s;
+      }
+      .vcard-accepted-continue:hover {
+        background: var(--accent-dark);
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 600px) {
+        .vcard {
+          flex-direction: column;
+          min-height: auto;
+        }
+        .vcard-left {
+          padding: 2rem 1.5rem;
+          min-height: 180px;
+        }
+        .vcard-right {
+          padding: 2rem 1.5rem;
+          min-height: 280px;
+        }
+      }
+
+      /* ============================================================
+   RESPONSIVE
+   ============================================================ */
+      @media (max-width: 500px) {
+        .hub-grid {
+          grid-template-columns: 1fr;
+          max-width: 320px;
+        }
+        .zoo-pets {
+          gap: 0.8rem;
+        }
+        .zoo-pet-emoji {
+          font-size: 2.5rem;
+        }
+        .zoo-pet-emoji.big {
+          font-size: 4.5rem;
+        }
+        .zoo-pet-emoji.small {
+          font-size: 2rem;
+        }
+        .zoo-meter-bg {
+          width: 70px;
+        }
+        .race-track {
+          padding: 0.4rem 0.6rem;
+        }
+        .race-rat {
+          font-size: 1.5rem;
+        }
+        .garden-grid {
+          max-width: 300px;
+        }
+        .garden-plot {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================================
+     FLOATING HEARTS BACKGROUND
+     ============================================================ -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <!-- ============================================================
+     VALENTINE CARD INTRO
+     ============================================================ -->
+    <div class="screen active" id="card-screen">
+      <div class="vcard">
+        <div class="vcard-left">
+          <div class="vcard-left-hearts" id="vcard-left-hearts"></div>
+          <div class="vcard-left-deco">💌</div>
+          <!-- CUSTOMIZE: Change this text! -->
+          <div class="vcard-left-text">A Little Something<br />For You</div>
+          <div class="vcard-left-sub">Feb 14, 2026</div>
+        </div>
+        <div class="vcard-right" id="vcard-right">
+          <div id="vcard-prompt">
+            <div class="vcard-question">Will you be my Valentine?</div>
+            <div class="vcard-buttons" id="vcard-buttons">
+              <button class="vcard-yes-btn" onclick="acceptValentine()">
+                Yes!
+              </button>
+              <button class="vcard-no-btn" id="no-btn">No</button>
+            </div>
+          </div>
+          <div class="vcard-accepted" id="vcard-accepted">
+            <div class="vcard-accepted-emoji">🥰</div>
+            <div class="vcard-accepted-text">I knew you'd say yes!</div>
+            <button
+              class="vcard-accepted-continue"
+              onclick="showScreen('hub-screen')"
+            >
+              See your surprise &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+     HUB SCREEN
+     ============================================================ -->
+    <div class="screen" id="hub-screen">
+      <!-- CUSTOMIZE: Change this title! -->
+      <h1 class="hub-title">Happy Valentine's Day!</h1>
+      <p class="hub-subtitle">Pick something fun</p>
+
+      <div class="hub-grid">
+        <div class="hub-card" onclick="showScreen('love-notes-screen')">
+          <span class="hub-card-emoji">💌</span>
+          <div class="hub-card-title">Love Notes</div>
+          <div class="hub-card-desc">Tap the heart</div>
+        </div>
+        <div class="hub-card" onclick="showScreen('rat-race-screen')">
+          <span class="hub-card-emoji">🐀</span>
+          <div class="hub-card-title">Rat Race</div>
+          <div class="hub-card-desc">Pick your champion</div>
+        </div>
+        <div class="hub-card" onclick="showScreen('petting-zoo-screen')">
+          <span class="hub-card-emoji">🐾</span>
+          <div class="hub-card-title">Petting Zoo</div>
+          <div class="hub-card-desc">Give them love</div>
+        </div>
+        <div class="hub-card" onclick="showScreen('garden-screen')">
+          <span class="hub-card-emoji">🌱</span>
+          <div class="hub-card-title">Love Garden</div>
+          <div class="hub-card-desc">Grow something sweet</div>
+        </div>
+        <div class="hub-card" onclick="showScreen('scratch-screen')">
+          <span class="hub-card-emoji">✨</span>
+          <div class="hub-card-title">Scratch Card</div>
+          <div class="hub-card-desc">Reveal a surprise</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+     LOVE NOTES SCREEN
+     ============================================================ -->
+    <div class="screen" id="love-notes-screen">
+      <button class="back-btn" onclick="navigateBack()">&#8592;</button>
+      <div class="love-note-hint">Tap the heart</div>
+      <div class="love-heart-btn" id="love-heart" onclick="showLoveNote()">
+        &#x1F496;
+      </div>
+      <div class="love-note-text" id="love-note-text"></div>
+    </div>
+
+    <!-- ============================================================
+     RAT RACE SCREEN
+     ============================================================ -->
+    <div class="screen" id="rat-race-screen">
+      <button
+        class="back-btn"
+        onclick="
+          resetRace();
+          navigateBack();
+        "
+      >
+        &#8592;
+      </button>
+      <div class="race-title">🐀 Rat Race 🐀</div>
+      <div class="race-status" id="race-status">Pick your rat!</div>
+
+      <div class="race-track-container" id="race-tracks"></div>
+
+      <div class="race-result" id="race-result"></div>
+
+      <div class="race-controls">
+        <button
+          class="race-btn"
+          id="race-start-btn"
+          onclick="startRace()"
+          disabled
+        >
+          Start Race!
+        </button>
+        <button
+          class="race-btn"
+          id="race-reset-btn"
+          onclick="resetRace()"
+          style="display: none; background: var(--text-light)"
+        >
+          Race Again
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+     PETTING ZOO SCREEN
+     ============================================================ -->
+    <div class="screen" id="petting-zoo-screen">
+      <button class="back-btn" onclick="navigateBack()">&#8592;</button>
+      <div class="zoo-title">Petting Zoo</div>
+      <div class="zoo-subtitle">Click the pets to give them love!</div>
+
+      <div class="zoo-pets">
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 0)">
+          <div class="zoo-pet-emoji" id="pet-emoji-0">🐕‍🦺</div>
+          <div class="zoo-pet-name">Shade</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-0"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 1)">
+          <div class="zoo-pet-emoji small" id="pet-emoji-1">🐀</div>
+          <div class="zoo-pet-name">Vera</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-1"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 2)">
+          <div class="zoo-pet-emoji" id="pet-emoji-2">🐕</div>
+          <div class="zoo-pet-name">Candy</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-2"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 3)">
+          <div class="zoo-pet-emoji" id="pet-emoji-3">🐈</div>
+          <div class="zoo-pet-name">Hero</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-3"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 4)">
+          <div class="zoo-pet-emoji small" id="pet-emoji-4">🐀</div>
+          <div class="zoo-pet-name">Indigo</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-4"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 5)">
+          <div class="zoo-pet-emoji big" id="pet-emoji-5">🐕‍🦺</div>
+          <div class="zoo-pet-name">Junior</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-5"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 6)">
+          <div class="zoo-pet-emoji small" id="pet-emoji-6">🐀</div>
+          <div class="zoo-pet-name">Velvet</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-6"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 7)">
+          <div class="zoo-pet-emoji" id="pet-emoji-7">🐕‍🦺</div>
+          <div class="zoo-pet-name">Ollie</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-7"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 8)">
+          <div class="zoo-pet-emoji small" id="pet-emoji-8">🐀</div>
+          <div class="zoo-pet-name">Astrid</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-8"></div>
+          </div>
+        </div>
+        <div class="zoo-pet" onpointerdown="petAnimal(event, 9)">
+          <div class="zoo-pet-emoji" id="pet-emoji-9">🐕</div>
+          <div class="zoo-pet-name">Daisy</div>
+          <div class="zoo-meter-bg">
+            <div class="zoo-meter-fill" id="pet-meter-9"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="zoo-complete-msg" id="zoo-complete">
+        They love you so much! 🥰
+      </div>
+    </div>
+
+    <!-- ============================================================
+     TINY GARDEN SCREEN
+     ============================================================ -->
+    <div class="screen" id="garden-screen">
+      <button class="back-btn" onclick="navigateBack()">&#8592;</button>
+      <div class="garden-title">Love Garden</div>
+      <div class="garden-subtitle">
+        Click a plot to plant, harvest when they bloom!
+      </div>
+      <div class="garden-grid" id="garden-grid"></div>
+      <div class="garden-harvest-note" id="garden-note"></div>
+      <div class="garden-info" id="garden-info"></div>
+    </div>
+
+    <!-- ============================================================
+     SCRATCH-OFF SCREEN
+     ============================================================ -->
+    <div class="screen" id="scratch-screen">
+      <button class="back-btn" onclick="navigateBack()">&#8592;</button>
+      <div class="scratch-title">Scratch to reveal your surprise!</div>
+
+      <div class="scratch-container" id="scratch-container">
+        <div class="scratch-message">
+          <div class="scratch-message-hearts">💕 💗 💕</div>
+          <!-- CUSTOMIZE: Change this message! -->
+          <div class="scratch-message-text" id="scratch-msg-text">
+            Your message here!
+          </div>
+          <div class="scratch-message-hearts-bottom">💕 💗 💕</div>
+        </div>
+        <canvas class="scratch-canvas" id="scratch-canvas"></canvas>
+      </div>
+
+      <div class="scratch-hint">Use your finger or mouse to scratch</div>
+      <div class="scratch-progress" id="scratch-progress"></div>
+    </div>
+
+    <!-- ============================================================
+     KONAMI OVERLAY
+     ============================================================ -->
+    <div class="konami-overlay" id="konami-overlay">
+      <div class="konami-content">
+        <!-- CUSTOMIZE: Change this secret message! -->
+        <div class="konami-text">You found the secret!</div>
+        <div class="konami-sub">You're the best Easter egg of all 💛</div>
+        <button class="konami-close" onclick="closeKonami()">Close</button>
+      </div>
+    </div>
+
+    <script>
+      /* ==============================================================
+   CUSTOMIZATION - EDIT THESE!
+   ============================================================== */
+
+      // LOVE NOTES: Fill this array with your own messages!
+      const LOVE_NOTES = [
+        "Love you.",
+        "💣LOVE BOMB LOOK OUT!💣",
+        "You deserve to be shown the kindness that others tak for granted.",
+        "Fuck Antis <3",
+        "You deserve care, companionship, and joy.",
+        "Together we can make it through any obstacle. You're not alone.",
+        "I LOVE THIS WOMAAAAAAAAAAAAAAN!",
+        "I love shaving your head and grooming eachother.",
+        "Dog Momma so powerful",
+        "Delaney's soon...",
+        "I couldn't have made it here without you, and I don't ever want to.",
+        "Era of AJ pampering is coming.",
+        "I love you with all of my heart.",
+        "You're my world.",
+        "Every day I get up and go to work only for you.",
+        "You smell nice.",
+        "I like your hugs.",
+        "Thank you for comforting me.",
+        "Good stuff is coming, hang in there.",
+        "Winter's tough, but we're strong.",
+        "Keep it up.",
+        "10/10 No notes.",
+      ];
+
+      // SCRATCH-OFF: The hidden message (also editable in the HTML above)
+      const SCRATCH_MESSAGE = "💰 $300 Gift Card";
+
+      // RAT NAMES: Give the racing rats silly names
+      const RAT_NAMES = ["Vera", "Indigo", "Velvet", "Astrid", "Wild Hog"];
+
+      // GARDEN NOTES: Messages revealed when harvesting crops!
+      const GARDEN_NOTES = [
+        "I truly feel that I've bloomed under your tender care and affection.",
+        "No matter what, life always pops with you!",
+        "I'm so proud of you.",
+        "You're always tending the garden, time to let me take on some more work.",
+        "Your love nourishes everyone around you.",
+        "Everyone around you grows stronger in the warmth of your light.",
+        "You deserve the tender care you offer so freely to those around you.",
+        "Your grace and patience inspire me.",
+        "It's an incredible person that so freely shares spoons when they have so few.",
+        "Some people just don't deserve you.",
+        "Gardening is nice, but you deserve a fucking vacation.",
+        "You rock.",
+        "Shade, Candy, Ollie and Junior would be so so proud of you.",
+      ];
+
+      /* ==============================================================
+   SCREEN NAVIGATION + HASH ROUTING
+   ============================================================== */
+      const SCREEN_HASHES = {
+        "card-screen": "",
+        "hub-screen": "#hub",
+        "love-notes-screen": "#love-notes",
+        "rat-race-screen": "#rat-race",
+        "petting-zoo-screen": "#petting-zoo",
+        "garden-screen": "#garden",
+        "scratch-screen": "#scratch",
+      };
+      const HASH_TO_SCREEN = Object.fromEntries(
+        Object.entries(SCREEN_HASHES).map(([k, v]) => [v, k]),
+      );
+
+      function showScreen(id, pushState = true) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+
+        if (pushState) {
+          const hash = SCREEN_HASHES[id] || "";
+          if (window.location.hash !== hash) {
+            history.pushState(
+              { screen: id },
+              "",
+              hash || window.location.pathname,
+            );
+          }
+        }
+
+        if (id === "scratch-screen") initScratchCard();
+        if (id === "rat-race-screen") initRaceTracks();
+      }
+
+      function navigateBack() {
+        if (window.history.length > 1) {
+          history.back();
+        } else {
+          showScreen("hub-screen");
+        }
+      }
+
+      window.addEventListener("popstate", () => {
+        const hash = window.location.hash || "";
+        const screenId = HASH_TO_SCREEN[hash] || "card-screen";
+        showScreen(screenId, false);
+      });
+
+      // Handle initial hash on page load
+      function handleInitialHash() {
+        const hash = window.location.hash || "";
+        const screenId = HASH_TO_SCREEN[hash];
+        if (screenId && screenId !== "card-screen") {
+          showScreen(screenId, false);
+        }
+      }
+
+      /* ==============================================================
+   FLOATING HEARTS BACKGROUND
+   ============================================================== */
+      function createFloatingHearts() {
+        const container = document.getElementById("floating-hearts");
+        const hearts = ["💕", "💗", "💖", "❤️", "💘", "💝", "🩷"];
+        for (let i = 0; i < 15; i++) {
+          const heart = document.createElement("div");
+          heart.className = "floating-heart";
+          heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.animationDuration = 8 + Math.random() * 12 + "s";
+          heart.style.animationDelay = Math.random() * 10 + "s";
+          heart.style.fontSize = 1 + Math.random() * 1.5 + "rem";
+          container.appendChild(heart);
+        }
+      }
+      createFloatingHearts();
+
+      /* ==============================================================
+   LOVE NOTES
+   ============================================================== */
+      let lastNoteIndex = -1;
+
+      function showLoveNote() {
+        const heart = document.getElementById("love-heart");
+        const textEl = document.getElementById("love-note-text");
+
+        // Pick a random note (avoid repeating the last one)
+        let idx;
+        do {
+          idx = Math.floor(Math.random() * LOVE_NOTES.length);
+        } while (idx === lastNoteIndex && LOVE_NOTES.length > 1);
+        lastNoteIndex = idx;
+
+        // Animate heart
+        heart.classList.remove("cracked");
+        void heart.offsetWidth; // force reflow
+        heart.classList.add("cracked");
+
+        // Show note with fade
+        textEl.classList.remove("visible");
+        setTimeout(() => {
+          textEl.textContent = LOVE_NOTES[idx];
+          textEl.classList.add("visible");
+        }, 300);
+      }
+
+      /* ==============================================================
+   RAT RACE
+   ============================================================== */
+      let raceState = {
+        selectedRat: -1,
+        racing: false,
+        finished: false,
+        positions: [],
+        speeds: [],
+        animFrame: null,
+      };
+
+      function initRaceTracks() {
+        if (raceState.racing) return;
+        const container = document.getElementById("race-tracks");
+        if (container.children.length > 0 && !raceState.finished) return;
+
+        container.innerHTML = "";
+        raceState = {
+          selectedRat: -1,
+          racing: false,
+          finished: false,
+          positions: [],
+          speeds: [],
+          animFrame: null,
+        };
+
+        document.getElementById("race-status").textContent = "Pick your rat!";
+        document.getElementById("race-result").textContent = "";
+        document.getElementById("race-start-btn").disabled = true;
+        document.getElementById("race-start-btn").style.display = "";
+        document.getElementById("race-reset-btn").style.display = "none";
+
+        for (let i = 0; i < RAT_NAMES.length; i++) {
+          const track = document.createElement("div");
+          track.className = "race-track selectable";
+          track.innerHTML = `
+      <span class="race-lane-num">${i + 1}</span>
+      <span class="race-rat" id="rat-${i}">🐀</span>
+      <span class="race-name">${RAT_NAMES[i]}</span>
+      <span class="race-finish">🧀</span>
+    `;
+          track.onclick = () => selectRat(i);
+          container.appendChild(track);
+          raceState.positions.push(0);
+          raceState.speeds.push(0);
+        }
+      }
+
+      function selectRat(index) {
+        if (raceState.racing || raceState.finished) return;
+        raceState.selectedRat = index;
+
+        document.querySelectorAll(".race-track").forEach((t, i) => {
+          t.classList.toggle("selected", i === index);
+        });
+
+        document.getElementById("race-status").textContent =
+          `You picked ${RAT_NAMES[index]}! 🐀`;
+        document.getElementById("race-start-btn").disabled = false;
+      }
+
+      function startRace() {
+        if (raceState.racing || raceState.selectedRat === -1) return;
+        raceState.racing = true;
+
+        document.getElementById("race-start-btn").disabled = true;
+        document
+          .querySelectorAll(".race-track")
+          .forEach((t) => t.classList.remove("selectable"));
+
+        // Enable clicking on selected rat for boost
+        const tracks = document.querySelectorAll(".race-track");
+        tracks[raceState.selectedRat].classList.add("clickable");
+        tracks[raceState.selectedRat].onclick = () => boostRat();
+
+        // Countdown
+        const status = document.getElementById("race-status");
+        status.textContent = "3...";
+        setTimeout(() => {
+          status.textContent = "2...";
+        }, 600);
+        setTimeout(() => {
+          status.textContent = "1...";
+        }, 1200);
+        setTimeout(() => {
+          status.textContent = "GO! Click your rat to boost! 🧀";
+          runRace();
+        }, 1800);
+      }
+
+      function boostRat() {
+        if (!raceState.racing) return;
+        raceState.speeds[raceState.selectedRat] += 0.8;
+      }
+
+      function runRace() {
+        const maxPos = 85; // percentage of track width
+
+        function tick() {
+          if (!raceState.racing) return;
+
+          let winner = -1;
+
+          for (let i = 0; i < RAT_NAMES.length; i++) {
+            // Random speed variation each tick
+            const baseSpeed = 0.15 + Math.random() * 0.4;
+            const boost = raceState.speeds[i] * 0.15;
+            raceState.speeds[i] *= 0.9; // decay boost
+
+            raceState.positions[i] += baseSpeed + boost;
+
+            if (raceState.positions[i] >= maxPos) {
+              raceState.positions[i] = maxPos;
+              if (winner === -1) winner = i;
+            }
+
+            const ratEl = document.getElementById(`rat-${i}`);
+            ratEl.style.marginLeft = raceState.positions[i] + "%";
+          }
+
+          if (winner !== -1) {
+            raceState.racing = false;
+            raceState.finished = true;
+
+            const result = document.getElementById("race-result");
+            const status = document.getElementById("race-status");
+
+            if (winner === raceState.selectedRat) {
+              result.textContent = `🏆 ${RAT_NAMES[winner]} wins! Your rat is a champion! 🧀`;
+              status.textContent = "WINNER WINNER CHEESE DINNER!";
+            } else {
+              const loserMessages = [
+                `${RAT_NAMES[winner]} wins! ${RAT_NAMES[raceState.selectedRat]} got distracted by some cheese...`,
+                `${RAT_NAMES[winner]} takes it! ${RAT_NAMES[raceState.selectedRat]} took a wrong turn.`,
+                `${RAT_NAMES[winner]} is the champion! Better luck next time, ${RAT_NAMES[raceState.selectedRat]}!`,
+                `${RAT_NAMES[winner]} zooms to victory! ${RAT_NAMES[raceState.selectedRat]} stopped for a snack.`,
+              ];
+              result.textContent =
+                loserMessages[Math.floor(Math.random() * loserMessages.length)];
+              status.textContent = "Race over!";
+            }
+
+            document.getElementById("race-start-btn").style.display = "none";
+            document.getElementById("race-reset-btn").style.display = "";
+            spawnConfetti(20);
+            return;
+          }
+
+          raceState.animFrame = requestAnimationFrame(tick);
+        }
+
+        tick();
+      }
+
+      function resetRace() {
+        if (raceState.animFrame) cancelAnimationFrame(raceState.animFrame);
+        raceState.racing = false;
+        raceState.finished = true; // force reinit
+        initRaceTracks();
+      }
+
+      /* ==============================================================
+   PETTING ZOO
+   ============================================================== */
+      const petLevels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      const PET_MAX = 100;
+      let zooCompleted = false;
+
+      // Slow decay — pets get lonely!
+      setInterval(() => {
+        if (zooCompleted) return;
+        for (let i = 0; i < petLevels.length; i++) {
+          if (petLevels[i] > 0 && petLevels[i] < PET_MAX) {
+            petLevels[i] = Math.max(0, petLevels[i] - 0.5);
+            document.getElementById(`pet-meter-${i}`).style.width =
+              petLevels[i] + "%";
+          }
+        }
+      }, 500);
+
+      function petAnimal(event, index) {
+        if (zooCompleted) return;
+
+        // Increment love meter
+        petLevels[index] = Math.min(petLevels[index] + 12, PET_MAX);
+        document.getElementById(`pet-meter-${index}`).style.width =
+          petLevels[index] + "%";
+
+        // Wiggle animation
+        const emoji = document.getElementById(`pet-emoji-${index}`);
+        emoji.classList.remove("wiggle");
+        void emoji.offsetWidth;
+        emoji.classList.add("wiggle");
+
+        // Spawn heart particles
+        spawnPetHearts(event.clientX, event.clientY);
+
+        // Check completion
+        if (petLevels.every((l) => l >= PET_MAX) && !zooCompleted) {
+          zooCompleted = true;
+          document.getElementById("zoo-complete").classList.add("visible");
+          spawnConfetti(40);
+        }
+      }
+
+      function spawnPetHearts(x, y) {
+        const hearts = ["❤️", "💕", "💗", "💖", "🩷"];
+        for (let i = 0; i < 3; i++) {
+          const heart = document.createElement("div");
+          heart.className = "pet-heart";
+          heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          heart.style.left = x - 10 + Math.random() * 20 + "px";
+          heart.style.top = y - 10 + "px";
+          heart.style.setProperty("--dx", Math.random() * 60 - 30 + "px");
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 1000);
+        }
+      }
+
+      /* ==============================================================
+   SCRATCH-OFF CARD
+   ============================================================== */
+      let scratchInited = false;
+
+      function initScratchCard() {
+        if (scratchInited) return;
+        scratchInited = true;
+
+        // Set the message text
+        document.getElementById("scratch-msg-text").textContent =
+          SCRATCH_MESSAGE;
+
+        const canvas = document.getElementById("scratch-canvas");
+        const container = document.getElementById("scratch-container");
+        const ctx = canvas.getContext("2d");
+
+        // Match canvas size to container
+        const rect = container.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        // Draw scratch overlay
+        const gradient = ctx.createLinearGradient(
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        );
+        gradient.addColorStop(0, "#e8456b");
+        gradient.addColorStop(0.3, "#f0a0b8");
+        gradient.addColorStop(0.5, "#e8456b");
+        gradient.addColorStop(0.7, "#f0a0b8");
+        gradient.addColorStop(1, "#e8456b");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Add shimmer dots
+        for (let i = 0; i < 200; i++) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.random() * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height,
+            Math.random() * 3,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+        }
+
+        // Add text on the scratch layer
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.font = `bold ${Math.min(canvas.width / 12, 28)}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.fillText("Scratch me! ✨", canvas.width / 2, canvas.height / 2);
+
+        // Scratching
+        let isScratching = false;
+
+        function scratch(x, y) {
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.beginPath();
+          ctx.arc(x, y, 25, 0, Math.PI * 2);
+          ctx.fill();
+          updateScratchProgress();
+        }
+
+        function getPos(e) {
+          const r = canvas.getBoundingClientRect();
+          const touch = e.touches ? e.touches[0] : e;
+          return { x: touch.clientX - r.left, y: touch.clientY - r.top };
+        }
+
+        canvas.addEventListener("mousedown", (e) => {
+          isScratching = true;
+          const p = getPos(e);
+          scratch(p.x, p.y);
+        });
+        canvas.addEventListener("mousemove", (e) => {
+          if (isScratching) {
+            const p = getPos(e);
+            scratch(p.x, p.y);
+          }
+        });
+        canvas.addEventListener("mouseup", () => (isScratching = false));
+        canvas.addEventListener("mouseleave", () => (isScratching = false));
+
+        canvas.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault();
+            isScratching = true;
+            const p = getPos(e);
+            scratch(p.x, p.y);
+          },
+          { passive: false },
+        );
+        canvas.addEventListener(
+          "touchmove",
+          (e) => {
+            e.preventDefault();
+            if (isScratching) {
+              const p = getPos(e);
+              scratch(p.x, p.y);
+            }
+          },
+          { passive: false },
+        );
+        canvas.addEventListener("touchend", () => (isScratching = false));
+      }
+
+      function updateScratchProgress() {
+        const canvas = document.getElementById("scratch-canvas");
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let transparent = 0;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+          if (imageData.data[i] === 0) transparent++;
+        }
+        const percent = Math.round(
+          (transparent / (imageData.data.length / 4)) * 100,
+        );
+
+        // Auto-clear when mostly scratched
+        if (percent > 75) {
+          canvas.style.transition = "opacity 0.5s";
+          canvas.style.opacity = "0";
+          setTimeout(() => (canvas.style.display = "none"), 500);
+        }
+      }
+
+      /* ==============================================================
+   KONAMI CODE
+   ============================================================== */
+      const KONAMI = [
+        "ArrowUp",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowLeft",
+        "ArrowRight",
+        "b",
+        "a",
+      ];
+      let konamiPos = 0;
+
+      document.addEventListener("keydown", (e) => {
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        if (key === KONAMI[konamiPos]) {
+          konamiPos++;
+          if (konamiPos === KONAMI.length) {
+            konamiPos = 0;
+            activateKonami();
+          }
+        } else {
+          konamiPos = key === KONAMI[0] ? 1 : 0;
+        }
+      });
+
+      function activateKonami() {
+        document.getElementById("konami-overlay").classList.add("active");
+        spawnConfetti(60);
+      }
+
+      function closeKonami() {
+        document.getElementById("konami-overlay").classList.remove("active");
+      }
+
+      /* ==============================================================
+   CONFETTI
+   ============================================================== */
+      function spawnConfetti(count) {
+        const hearts = ["❤️", "💕", "💗", "💖", "🩷", "💘", "💝", "✨", "🌟"];
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement("div");
+          el.className = "confetti-heart";
+          el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          el.style.left = Math.random() * 100 + "vw";
+          el.style.animationDuration = 2 + Math.random() * 3 + "s";
+          el.style.animationDelay = Math.random() * 0.8 + "s";
+          el.style.fontSize = 1 + Math.random() * 1.5 + "rem";
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 6000);
+        }
+      }
+
+      /* ==============================================================
+   TINY GARDEN
+   ============================================================== */
+      const GARDEN_COLS = 4;
+      const GARDEN_ROWS = 3;
+      const GARDEN_TOTAL = GARDEN_COLS * GARDEN_ROWS;
+      const GROW_TIME_1 = 5000; // seed → sprout (ms)
+      const GROW_TIME_2 = 8000; // sprout → bloom (ms)
+
+      const CROP_STAGES = {
+        empty: "",
+        seed: "🌱",
+        sprout: "🌿",
+      };
+      const BLOOM_TYPES = ["🌷", "🌻", "🌹", "💐", "🌸", "🌺"];
+
+      const gardenPlots = [];
+      let gardenNoteIdx = 0;
+      let gardenInited = false;
+
+      function initGarden() {
+        if (gardenInited) return;
+        gardenInited = true;
+
+        const grid = document.getElementById("garden-grid");
+        for (let i = 0; i < GARDEN_TOTAL; i++) {
+          const plot = document.createElement("div");
+          plot.className = "garden-plot";
+          plot.innerHTML = '<span class="garden-plot-emoji"></span>';
+          plot.addEventListener("click", () => gardenClick(i));
+          grid.appendChild(plot);
+          gardenPlots.push({
+            el: plot,
+            emojiEl: plot.querySelector(".garden-plot-emoji"),
+            state: "empty",
+            bloom: null,
+            timer1: null,
+            timer2: null,
+          });
+        }
+        updateGardenInfo();
+      }
+
+      function gardenClick(index) {
+        const plot = gardenPlots[index];
+
+        if (plot.state === "empty") {
+          // Plant a seed
+          plot.state = "seed";
+          plot.emojiEl.textContent = CROP_STAGES.seed;
+          plot.el.classList.add("planted");
+          popEmoji(plot.emojiEl);
+
+          // Schedule growth stages
+          plot.timer1 = setTimeout(() => {
+            plot.state = "sprout";
+            plot.emojiEl.textContent = CROP_STAGES.sprout;
+            popEmoji(plot.emojiEl);
+          }, GROW_TIME_1);
+
+          plot.timer2 = setTimeout(() => {
+            plot.state = "ready";
+            plot.bloom =
+              BLOOM_TYPES[Math.floor(Math.random() * BLOOM_TYPES.length)];
+            plot.emojiEl.textContent = plot.bloom;
+            plot.el.classList.remove("planted");
+            plot.el.classList.add("ready");
+            popEmoji(plot.emojiEl);
+          }, GROW_TIME_1 + GROW_TIME_2);
+
+          updateGardenInfo();
+        } else if (plot.state === "ready") {
+          // Harvest!
+          const noteEl = document.getElementById("garden-note");
+          noteEl.classList.remove("visible");
+
+          // Spawn some hearts at click location
+          const rect = plot.el.getBoundingClientRect();
+          spawnPetHearts(
+            rect.left + rect.width / 2,
+            rect.top + rect.height / 2,
+          );
+
+          // Reset plot
+          plot.state = "empty";
+          plot.emojiEl.textContent = "";
+          plot.bloom = null;
+          plot.el.classList.remove("ready", "planted");
+
+          // Show harvest note
+          setTimeout(() => {
+            noteEl.textContent =
+              GARDEN_NOTES[gardenNoteIdx % GARDEN_NOTES.length];
+            noteEl.classList.add("visible");
+            gardenNoteIdx++;
+          }, 200);
+
+          updateGardenInfo();
+        }
+      }
+
+      function popEmoji(el) {
+        el.classList.remove("pop");
+        void el.offsetWidth;
+        el.classList.add("pop");
+      }
+
+      function updateGardenInfo() {
+        const growing = gardenPlots.filter(
+          (p) => p.state === "seed" || p.state === "sprout",
+        ).length;
+        const ready = gardenPlots.filter((p) => p.state === "ready").length;
+        const info = document.getElementById("garden-info");
+        if (ready > 0) {
+          info.textContent = `${ready} ready to harvest!`;
+        } else {
+          info.textContent = "Click any plot to plant a seed";
+        }
+      }
+
+      // Initialize the garden
+      initGarden();
+
+      /* ==============================================================
+   VALENTINE CARD INTRO
+   ============================================================== */
+
+      // Decorate left side of card with tiny floating hearts
+      (function initCardHearts() {
+        const container = document.getElementById("vcard-left-hearts");
+        const hearts = ["💕", "💗", "❤️", "🩷", "💖"];
+        for (let i = 0; i < 10; i++) {
+          const span = document.createElement("span");
+          span.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          span.style.left = Math.random() * 100 + "%";
+          span.style.animationDuration = 6 + Math.random() * 8 + "s";
+          span.style.animationDelay = Math.random() * 6 + "s";
+          span.style.fontSize = 0.8 + Math.random() * 1 + "rem";
+          container.appendChild(span);
+        }
+      })();
+
+      // No button fleeing behavior — uses transform only (no position changes)
+      const noBtn = document.getElementById("no-btn");
+      const vcardRight = document.getElementById("vcard-right");
+      let noAttempts = 0;
+      let noDead = false;
+      let noOffsetX = 0;
+      let noOffsetY = 0;
+      let noScale = 1;
+
+      // Stage thresholds
+      const STAGE_JUMP = 4;
+      const STAGE_SHRINK = 8;
+      const STAGE_DEAD = 11;
+
+      function getNoStage() {
+        if (noAttempts >= STAGE_DEAD) return "dead";
+        if (noAttempts >= STAGE_SHRINK) return "shrink";
+        if (noAttempts >= STAGE_JUMP) return "jump";
+        return "drift";
+      }
+
+      function noBtnCenter() {
+        const r = noBtn.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      // Clamp the button so it stays within the right panel
+      function clampOffset(dx, dy) {
+        const container = vcardRight.getBoundingClientRect();
+        const btn = noBtn.getBoundingClientRect();
+        // Current visual center of button
+        const cx = btn.left + btn.width / 2;
+        const cy = btn.top + btn.height / 2;
+        // Natural center (without current offset)
+        const natX = cx - noOffsetX;
+        const natY = cy - noOffsetY;
+        // Desired center
+        const wantX = natX + dx;
+        const wantY = natY + dy;
+        // Half-dims
+        const hw = btn.width / 2 + 8;
+        const hh = btn.height / 2 + 8;
+        // Clamp within container
+        const clampedX = Math.max(
+          container.left + hw,
+          Math.min(container.right - hw, wantX),
+        );
+        const clampedY = Math.max(
+          container.top + hh,
+          Math.min(container.bottom - hh, wantY),
+        );
+        return { x: clampedX - natX, y: clampedY - natY };
+      }
+
+      function applyNoTransform() {
+        noBtn.style.transform = `translate(${noOffsetX}px, ${noOffsetY}px) scale(${noScale})`;
+      }
+
+      const TRIGGER_RADIUS = 90;
+      let lastTriggerTime = 0;
+
+      vcardRight.addEventListener("mousemove", (e) => {
+        if (noDead) return;
+
+        const c = noBtnCenter();
+        const dist = Math.hypot(e.clientX - c.x, e.clientY - c.y);
+        if (dist > TRIGGER_RADIUS) return;
+
+        // Throttle triggers slightly so stages feel distinct
+        const now = Date.now();
+        if (now - lastTriggerTime < 200) return;
+        lastTriggerTime = now;
+
+        const stage = getNoStage();
+        noAttempts++;
+
+        // Remove old stage classes, add current
+        noBtn.classList.remove("drift", "jump", "shrink");
+        noBtn.classList.add(stage);
+
+        if (stage === "drift") {
+          // Push away from cursor direction
+          const angle = Math.atan2(c.y - e.clientY, c.x - e.clientX);
+          const pushDist = 50 + Math.random() * 30;
+          const dx = noOffsetX + Math.cos(angle) * pushDist;
+          const dy = noOffsetY + Math.sin(angle) * pushDist;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        } else if (stage === "jump") {
+          // Random big jump
+          const container = vcardRight.getBoundingClientRect();
+          const maxJumpX = container.width * 0.35;
+          const maxJumpY = container.height * 0.35;
+          const dx = noOffsetX + (Math.random() - 0.5) * maxJumpX * 2;
+          const dy = noOffsetY + (Math.random() - 0.5) * maxJumpY * 2;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        } else if (stage === "shrink") {
+          // Shrink + jump
+          const shrinkStep = noAttempts - STAGE_SHRINK;
+          noScale = Math.max(0.3, 1 - shrinkStep * 0.2);
+          const container = vcardRight.getBoundingClientRect();
+          const maxJumpX = container.width * 0.3;
+          const maxJumpY = container.height * 0.3;
+          const dx = noOffsetX + (Math.random() - 0.5) * maxJumpX * 2;
+          const dy = noOffsetY + (Math.random() - 0.5) * maxJumpY * 2;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        }
+
+        // Check if we just crossed into dead
+        if (getNoStage() === "dead" && !noDead) {
+          killNoBtn();
+        }
+      });
+
+      // Block clicks on No — treat as an attempt
+      noBtn.addEventListener("click", (e) => {
+        if (noDead) return;
+        e.preventDefault();
+        noAttempts += 2;
+        if (getNoStage() === "dead") {
+          killNoBtn();
+        }
+      });
+
+      function killNoBtn() {
+        noDead = true;
+        noBtn.disabled = true;
+        noBtn.textContent = ":(";
+        noBtn.classList.remove("drift", "jump", "shrink");
+        noScale = 0.7;
+        applyNoTransform();
+      }
+
+      function acceptValentine() {
+        document.getElementById("vcard-prompt").style.display = "none";
+        document.getElementById("vcard-accepted").classList.add("visible");
+        spawnConfetti(50);
+      }
+
+      /* ==============================================================
+   INIT
+   ============================================================== */
+      // Pre-build race tracks
+      initRaceTracks();
+      // Route to initial hash if present
+      handleInitialHash();
+    </script>
+  </body>
+</html>
