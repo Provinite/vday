@@ -354,58 +354,140 @@
       })();
 
       /* ============================================================
-         NO BUTTON BEHAVIOUR
+         NO BUTTON FLEEING BEHAVIOUR
          ============================================================ */
-      let noAttempts = 0;
       const noBtn = document.getElementById("no-btn");
-      const btnContainer = document.getElementById("vcard-buttons");
+      const vcardRight = document.getElementById("vcard-right");
+      let noAttempts = 0;
+      let noDead = false;
+      let noOffsetX = 0;
+      let noOffsetY = 0;
+      let noScale = 1;
 
-      noBtn.addEventListener("pointerdown", function (e) {
-        e.preventDefault();
+      const STAGE_JUMP = 4;
+      const STAGE_SHRINK = 8;
+      const STAGE_DEAD = 11;
+
+      function getNoStage() {
+        if (noAttempts >= STAGE_DEAD) return "dead";
+        if (noAttempts >= STAGE_SHRINK) return "shrink";
+        if (noAttempts >= STAGE_JUMP) return "jump";
+        return "drift";
+      }
+
+      function noBtnCenter() {
+        const r = noBtn.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      function clampOffset(dx, dy) {
+        const container = vcardRight.getBoundingClientRect();
+        const btn = noBtn.getBoundingClientRect();
+        const cx = btn.left + btn.width / 2;
+        const cy = btn.top + btn.height / 2;
+        const natX = cx - noOffsetX;
+        const natY = cy - noOffsetY;
+        const wantX = natX + dx;
+        const wantY = natY + dy;
+        const hw = btn.width / 2 + 8;
+        const hh = btn.height / 2 + 8;
+        const clampedX = Math.max(
+          container.left + hw,
+          Math.min(container.right - hw, wantX),
+        );
+        const clampedY = Math.max(
+          container.top + hh,
+          Math.min(container.bottom - hh, wantY),
+        );
+        return { x: clampedX - natX, y: clampedY - natY };
+      }
+
+      function applyNoTransform() {
+        noBtn.style.transform = `translate(${noOffsetX}px, ${noOffsetY}px) scale(${noScale})`;
+      }
+
+      const TRIGGER_RADIUS = 90;
+      let lastTriggerTime = 0;
+
+      vcardRight.addEventListener("mousemove", (e) => {
+        if (noDead) return;
+
+        const c = noBtnCenter();
+        const dist = Math.hypot(e.clientX - c.x, e.clientY - c.y);
+        if (dist > TRIGGER_RADIUS) return;
+
+        const now = Date.now();
+        if (now - lastTriggerTime < 200) return;
+        lastTriggerTime = now;
+
+        const stage = getNoStage();
         noAttempts++;
-        const rect = btnContainer.getBoundingClientRect();
 
-        if (noAttempts <= 2) {
-          noBtn.className = "vcard-no-btn drift";
-          const dx = (Math.random() - 0.5) * rect.width * 0.6;
-          const dy = (Math.random() - 0.5) * 40;
-          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
-        } else if (noAttempts <= 4) {
-          noBtn.className = "vcard-no-btn jump";
-          const dx = (Math.random() - 0.5) * rect.width * 0.8;
-          const dy = -30 - Math.random() * 50;
-          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
-        } else if (noAttempts <= 5) {
-          noBtn.className = "vcard-no-btn shrink";
-          noBtn.style.transform = "scale(0.5)";
-          noBtn.textContent = "...";
-        } else {
-          noBtn.className = "vcard-no-btn shrink";
-          noBtn.style.transform = "scale(0)";
-          noBtn.disabled = true;
-          setTimeout(function () {
-            noBtn.style.display = "none";
-          }, 400);
+        noBtn.classList.remove("drift", "jump", "shrink");
+        noBtn.classList.add(stage);
+
+        if (stage === "drift") {
+          const angle = Math.atan2(c.y - e.clientY, c.x - e.clientX);
+          const pushDist = 50 + Math.random() * 30;
+          const dx = noOffsetX + Math.cos(angle) * pushDist;
+          const dy = noOffsetY + Math.sin(angle) * pushDist;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        } else if (stage === "jump") {
+          const container = vcardRight.getBoundingClientRect();
+          const maxJumpX = container.width * 0.35;
+          const maxJumpY = container.height * 0.35;
+          const dx = noOffsetX + (Math.random() - 0.5) * maxJumpX * 2;
+          const dy = noOffsetY + (Math.random() - 0.5) * maxJumpY * 2;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        } else if (stage === "shrink") {
+          const shrinkStep = noAttempts - STAGE_SHRINK;
+          noScale = Math.max(0.3, 1 - shrinkStep * 0.2);
+          const container = vcardRight.getBoundingClientRect();
+          const maxJumpX = container.width * 0.3;
+          const maxJumpY = container.height * 0.3;
+          const dx = noOffsetX + (Math.random() - 0.5) * maxJumpX * 2;
+          const dy = noOffsetY + (Math.random() - 0.5) * maxJumpY * 2;
+          const clamped = clampOffset(dx, dy);
+          noOffsetX = clamped.x;
+          noOffsetY = clamped.y;
+          applyNoTransform();
+        }
+
+        if (getNoStage() === "dead" && !noDead) {
+          killNoBtn();
         }
       });
 
-      noBtn.addEventListener("pointerenter", function () {
-        if (noAttempts >= 3) {
-          const rect = btnContainer.getBoundingClientRect();
-          noBtn.className = "vcard-no-btn jump";
-          const dx = (Math.random() - 0.5) * rect.width * 0.8;
-          const dy = -20 - Math.random() * 40;
-          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+      noBtn.addEventListener("click", (e) => {
+        if (noDead) return;
+        e.preventDefault();
+        noAttempts += 2;
+        if (getNoStage() === "dead") {
+          killNoBtn();
         }
       });
+
+      function killNoBtn() {
+        noDead = true;
+        noBtn.disabled = true;
+        noBtn.textContent = ":(";
+        noBtn.classList.remove("drift", "jump", "shrink");
+        noScale = 0.7;
+        applyNoTransform();
+      }
 
       /* ============================================================
          ACCEPT VALENTINE
          ============================================================ */
       function acceptValentine() {
         document.getElementById("vcard-prompt").style.display = "none";
-        const accepted = document.getElementById("vcard-accepted");
-        accepted.classList.add("visible");
+        document.getElementById("vcard-accepted").classList.add("visible");
       }
     </script>
   </body>
