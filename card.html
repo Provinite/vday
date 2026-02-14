@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will You Be My Valentine?</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Will You Be My Valentine?" />
+    <meta
+      property="og:description"
+      content="Someone has a little something for you 💌"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Valentine's Day card with a love letter envelope and the text 'A Little Something For You'" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Will You Be My Valentine?" />
+    <meta
+      name="twitter:description"
+      content="Someone has a little something for you 💌"
+    />
+    <meta name="twitter:image" content="og-card.png" />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#e8456b" />
+
+    <style>
+      :root {
+        --bg-primary: #ffeef2;
+        --bg-secondary: #ffd6e0;
+        --accent: #e8456b;
+        --accent-dark: #c73558;
+        --accent-light: #ffb3c6;
+        --text: #5a1a2a;
+        --text-light: #8a4a5a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-primary) 0%,
+          var(--bg-secondary) 50%,
+          #ffc8d6 100%
+        );
+        min-height: 100vh;
+        color: var(--text);
+        overflow-x: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+
+      /* ============================================================
+         FLOATING HEARTS BACKGROUND
+         ============================================================ */
+      .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+      .floating-heart {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.15;
+        animation: floatUp linear infinite;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(110vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.15;
+        }
+        90% {
+          opacity: 0.15;
+        }
+        100% {
+          transform: translateY(-10vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+         VALENTINE CARD
+         ============================================================ */
+      .vcard {
+        display: flex;
+        width: min(900px, 94vw);
+        min-height: min(520px, 80vh);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 12px 50px rgba(180, 40, 80, 0.25);
+        z-index: 1;
+      }
+      .vcard-left {
+        flex: 1;
+        background: linear-gradient(160deg, #c73558, #e8456b 40%, #f0758a);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .vcard-left-deco {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: heartPulse 1.5s ease-in-out infinite;
+      }
+      @keyframes heartPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+      .vcard-left-text {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        line-height: 1.4;
+      }
+      .vcard-left-sub {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.75);
+        margin-top: 0.8rem;
+        font-style: italic;
+      }
+      .vcard-left-hearts {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .vcard-left-hearts span {
+        position: absolute;
+        font-size: 1.2rem;
+        opacity: 0.2;
+        animation: floatUp linear infinite;
+      }
+      .vcard-right {
+        flex: 1;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 2rem;
+        position: relative;
+      }
+      .vcard-question {
+        font-size: clamp(1.4rem, 3.5vw, 2rem);
+        font-weight: 700;
+        color: var(--accent-dark);
+        text-align: center;
+        margin-bottom: 2.5rem;
+        line-height: 1.4;
+      }
+      .vcard-buttons {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        position: relative;
+        min-height: 80px;
+        width: 100%;
+        justify-content: center;
+      }
+      .vcard-yes-btn {
+        background: linear-gradient(135deg, #e8456b, #c73558);
+        color: white;
+        border: none;
+        border-radius: 2rem;
+        padding: 1rem 2.5rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.2s;
+        z-index: 2;
+      }
+      .vcard-yes-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(232, 69, 107, 0.45);
+      }
+      .vcard-yes-btn:active {
+        transform: scale(0.95);
+      }
+      .vcard-no-btn {
+        background: #e0e0e0;
+        color: #666;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 2;
+        white-space: nowrap;
+        will-change: transform;
+      }
+      .vcard-no-btn.drift {
+        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .vcard-no-btn.jump {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .vcard-no-btn.shrink {
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .vcard-no-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        background: #ccc;
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
+      .vcard-accepted {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .vcard-accepted.visible {
+        display: flex;
+        animation: fadeIn 0.6s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .vcard-accepted-emoji {
+        font-size: 4rem;
+      }
+      .vcard-accepted-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .vcard {
+          flex-direction: column;
+          min-height: auto;
+        }
+        .vcard-left {
+          padding: 2rem 1.5rem;
+          min-height: 180px;
+        }
+        .vcard-right {
+          padding: 2rem 1.5rem;
+          min-height: 280px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <div class="vcard">
+      <div class="vcard-left">
+        <div class="vcard-left-hearts" id="vcard-left-hearts"></div>
+        <div class="vcard-left-deco">💌</div>
+        <div class="vcard-left-text">A Little Something<br />For You</div>
+        <div class="vcard-left-sub">Feb 14, 2026</div>
+      </div>
+      <div class="vcard-right" id="vcard-right">
+        <div id="vcard-prompt">
+          <div class="vcard-question">Will you be my Valentine?</div>
+          <div class="vcard-buttons" id="vcard-buttons">
+            <button class="vcard-yes-btn" onclick="acceptValentine()">
+              Yes!
+            </button>
+            <button class="vcard-no-btn" id="no-btn">No</button>
+          </div>
+        </div>
+        <div class="vcard-accepted" id="vcard-accepted">
+          <div class="vcard-accepted-emoji">🥰</div>
+          <div class="vcard-accepted-text">I knew you'd say yes!</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ============================================================
+         FLOATING HEARTS BACKGROUND
+         ============================================================ */
+      (function () {
+        const container = document.getElementById("floating-hearts");
+        const hearts = ["💕", "💗", "💖", "❤️", "💘", "💝", "🩷"];
+        for (let i = 0; i < 15; i++) {
+          const span = document.createElement("span");
+          span.className = "floating-heart";
+          span.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          span.style.left = Math.random() * 100 + "%";
+          span.style.animationDuration = 8 + Math.random() * 12 + "s";
+          span.style.animationDelay = -(Math.random() * 20) + "s";
+          span.style.fontSize = 0.8 + Math.random() * 1.2 + "rem";
+          container.appendChild(span);
+        }
+      })();
+
+      /* ============================================================
+         CARD-LEFT MINI HEARTS
+         ============================================================ */
+      (function () {
+        const container = document.getElementById("vcard-left-hearts");
+        for (let i = 0; i < 8; i++) {
+          const span = document.createElement("span");
+          span.textContent = "💕";
+          span.style.left = Math.random() * 100 + "%";
+          span.style.animationDuration = 4 + Math.random() * 6 + "s";
+          span.style.animationDelay = -(Math.random() * 10) + "s";
+          container.appendChild(span);
+        }
+      })();
+
+      /* ============================================================
+         NO BUTTON BEHAVIOUR
+         ============================================================ */
+      let noAttempts = 0;
+      const noBtn = document.getElementById("no-btn");
+      const btnContainer = document.getElementById("vcard-buttons");
+
+      noBtn.addEventListener("pointerdown", function (e) {
+        e.preventDefault();
+        noAttempts++;
+        const rect = btnContainer.getBoundingClientRect();
+
+        if (noAttempts <= 2) {
+          noBtn.className = "vcard-no-btn drift";
+          const dx = (Math.random() - 0.5) * rect.width * 0.6;
+          const dy = (Math.random() - 0.5) * 40;
+          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+        } else if (noAttempts <= 4) {
+          noBtn.className = "vcard-no-btn jump";
+          const dx = (Math.random() - 0.5) * rect.width * 0.8;
+          const dy = -30 - Math.random() * 50;
+          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+        } else if (noAttempts <= 5) {
+          noBtn.className = "vcard-no-btn shrink";
+          noBtn.style.transform = "scale(0.5)";
+          noBtn.textContent = "...";
+        } else {
+          noBtn.className = "vcard-no-btn shrink";
+          noBtn.style.transform = "scale(0)";
+          noBtn.disabled = true;
+          setTimeout(function () {
+            noBtn.style.display = "none";
+          }, 400);
+        }
+      });
+
+      noBtn.addEventListener("pointerenter", function () {
+        if (noAttempts >= 3) {
+          const rect = btnContainer.getBoundingClientRect();
+          noBtn.className = "vcard-no-btn jump";
+          const dx = (Math.random() - 0.5) * rect.width * 0.8;
+          const dy = -20 - Math.random() * 40;
+          noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+        }
+      });
+
+      /* ============================================================
+         ACCEPT VALENTINE
+         ============================================================ */
+      function acceptValentine() {
+        document.getElementById("vcard-prompt").style.display = "none";
+        const accepted = document.getElementById("vcard-accepted");
+        accepted.classList.add("visible");
+      }
+    </script>
+  </body>
+</html>
